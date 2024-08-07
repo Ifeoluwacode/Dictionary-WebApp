@@ -45,6 +45,7 @@ function App() {
           if (!res.ok) throw new Error("something went wrong");
           const data = await res.json();
           setRawWord(data);
+
           setError("");
         } catch (err) {
           if (err.name !== "AbortError") {
@@ -77,6 +78,7 @@ function App() {
         );
 
         setWord(filteredData);
+        // console.log(filteredData);
       };
       filterOutLongestArray();
     },
@@ -87,7 +89,7 @@ function App() {
     <div
       className={`flex justify-center dark:bg-[#050505] min-h-[100vh] font-${font} pt-6`}
     >
-      <div className="w-[60%]">
+      <div className="w-[60%] max-[450px]:w-[80%]">
         <Nav
           toggleDarkMode={toggleDarkMode}
           darkSide={darkSide}
@@ -132,21 +134,15 @@ function Nav({ toggleDarkMode, darkSide, colorTheme, onFamilyFont }) {
       </svg>
       <div className="flex gap-5 flex-row items-center max-[350px]:gap-3">
         <select
-          className="focus:outline-none dark:bg-black dark:text-[#fff] font-bold max-[350px]:text-[12px] max-[400px]: w-24 "
+          className="focus:outline-none bg-transparent dark:bg-black dark:text-[#fff] font-bold max-[350px]:text-[12px] max-[400px]: w-24 "
           name=""
           id=""
           onChange={(e) => onFamilyFont(e.target.value)}
         >
-          <option
-            className="font-sans font-bold hover:text-[#a445ed] "
-            value="sans"
-          >
+          <option className="font-sans font-bold" value="sans">
             San Serif
           </option>
-          <option
-            className="font-serif font-bold hover:text-[#a445ed] "
-            value="serif"
-          >
+          <option className="font-serif font-bold" value="serif">
             Serif
           </option>
           <option
@@ -235,12 +231,13 @@ function Word({ words }) {
     },
     [words]
   );
+  // console.log(words.sourceUrls);
 
   return (
     <div>
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <h1 className="text-4xl font-bold dark:text-[#ffff] ">
+          <h1 className="text-3xl font-bold dark:text-[#ffff] ">
             {words.word}
           </h1>
           <p className="text-[#a445ed] my-3">{words.phonetic}</p>
@@ -248,8 +245,8 @@ function Word({ words }) {
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="42"
-            height="42"
+            width="30"
+            height="30"
             viewBox="0 0 75 75"
           >
             <g fill="#A445ED" fillRule="evenodd">
@@ -259,9 +256,24 @@ function Word({ words }) {
           </svg>
         </span>
       </div>
-      {words.meanings.map((meaning) => (
-        <Meaning meaning={meaning} key={meaning.partOfSpeech} />
-      ))}
+      <div>
+        {words.meanings.map((meaning) => (
+          <Meaning meaning={meaning} key={meaning.partOfSpeech} />
+        ))}
+      </div>
+      <div className="border-t-[1px] mb-5  border-[#2D2D2D] py-10">
+        <h3 className="underline decoration-1 decoration-[#757575] text-[#757575] text-sm">
+          Source
+        </h3>
+
+        <a
+          href={words.sourceUrls}
+          className="underline decoration-1 decoration-[#757575] text-[#2d2d2d]  dark:text-[#fff] text-sm "
+        >
+          {" "}
+          {words.sourceUrls}
+        </a>
+      </div>
     </div>
   );
 }
